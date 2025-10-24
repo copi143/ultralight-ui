@@ -3,6 +3,7 @@ package ultralightui
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.Minecraft
 import org.lwjgl.glfw.GLFW
+import org.lwjgl.glfw.GLFWKeyCallback
 
 object KeyBinding {
     val MENU_KEY = KeyMapping(
@@ -22,6 +23,34 @@ object KeyBinding {
         GLFW.GLFW_KEY_PRINT_SCREEN,
         "key.categories.ultralightui",
     )
+
+    val TEMPORARY_ESCAPE_KEY = KeyMapping(
+        "key.ultralightui.temporary_escape",
+        GLFW.GLFW_KEY_R,
+        "key.categories.ultralightui",
+    )
+
+    val ALL_KEYS = listOf(MENU_KEY, BROWSER_KEY, PRINTSCREEN_KEY, TEMPORARY_ESCAPE_KEY)
+
+    var boundKeyOf: (KeyMapping) -> Int = { _ -> -1 }
+
+    private var prevGlfwKeyCallback: GLFWKeyCallback? = null
+    fun onGameInited() {
+        val window = Minecraft.getInstance().window.window
+        prevGlfwKeyCallback = GLFW.glfwSetKeyCallback(window) { window, key, scancode, action, mods ->
+            if (key == boundKeyOf(TEMPORARY_ESCAPE_KEY)) {
+                if (Minecraft.getInstance().screen == null && action == GLFW.GLFW_PRESS) {
+                    Minecraft.getInstance().setScreen(TemporaryEscapeScreen())
+                } else if (Minecraft.getInstance().screen is TemporaryEscapeScreen && action == GLFW.GLFW_RELEASE) {
+                    Minecraft.getInstance().setScreen(null)
+                } else {
+                    prevGlfwKeyCallback?.invoke(window, key, scancode, action, mods)
+                }
+            }else {
+                prevGlfwKeyCallback?.invoke(window, key, scancode, action, mods)
+            }
+        }
+    }
 
     fun clientTick() {
         if (Minecraft.getInstance().screen == null && MENU_KEY.isDown) {

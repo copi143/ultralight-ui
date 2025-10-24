@@ -15,6 +15,13 @@ object Ultralight {
 
     var fullScreenView: UltralightView? = null
 
+    private var _lastFocusedView: Int? = null
+    var lastFocusedView: UltralightView?
+        get() = _lastFocusedView?.let { views[it] }
+        set(value) {
+            _lastFocusedView = value?.id
+        }
+
     val lib_soname: String by lazy {
         val os = System.getProperty("os.name")
         if (os.startsWith("Linux")) {

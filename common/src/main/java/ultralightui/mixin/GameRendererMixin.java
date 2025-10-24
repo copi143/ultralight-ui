@@ -121,6 +121,9 @@ public abstract class GameRendererMixin {
                     ultralight_ui$drawBackground(color, v.getX() - width, v.getY() - width, v.getWidth() + 2 * width, v.getHeight() + 2 * width);
                     ultralight_ui$drawBackground(0xffffff, v.getX(), v.getY(), v.getWidth(), v.getHeight());
                 }
+                if (minecraft.screen instanceof TemporaryEscapeScreen) {
+                    ultralight_ui$drawBackground(0xffffff, v.getX(), v.getY(), v.getWidth(), v.getHeight());
+                }
                 ultralight_ui$drawTexture(v.getTextureId(), v.getX(), v.getY(), v.getWidth(), v.getHeight());
             }
         }

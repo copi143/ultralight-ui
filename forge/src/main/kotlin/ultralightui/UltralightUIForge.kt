@@ -13,5 +13,6 @@ class UltralightUIForge() {
         Ultralight.init()
         KotlinModLoadingContext.get().getKEventBus().addListener(KeyBindingClientEvents::onRegisterKeyMappings)
         MinecraftForge.EVENT_BUS.addListener(KeyBindingClientEvents::onClientTick)
+        MinecraftForge.EVENT_BUS.addListener(KeyBindingClientEvents::onClientSetup)
     }
 }
