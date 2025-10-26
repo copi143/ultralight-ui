@@ -24,13 +24,26 @@ object KeyBinding {
         "key.categories.ultralightui",
     )
 
+    // 游戏内设置快捷键，替换玩家快捷栏的渲染来实现配置
+    val INGAME_CONFIG_KEY = KeyMapping(
+        "key.ultralightui.ingame_config",
+        GLFW.GLFW_KEY_C,
+        "key.categories.ultralightui",
+    )
+
     val TEMPORARY_ESCAPE_KEY = KeyMapping(
         "key.ultralightui.temporary_escape",
         GLFW.GLFW_KEY_R,
         "key.categories.ultralightui",
     )
 
-    val ALL_KEYS = listOf(MENU_KEY, BROWSER_KEY, PRINTSCREEN_KEY, TEMPORARY_ESCAPE_KEY)
+    val TEMPORARY_HIDE_VIEWS = KeyMapping(
+        "key.ultralightui.temporary_hide_views",
+        GLFW.GLFW_KEY_G,
+        "key.categories.ultralightui",
+    )
+
+    val ALL_KEYS = listOf(MENU_KEY, BROWSER_KEY, PRINTSCREEN_KEY, TEMPORARY_ESCAPE_KEY, TEMPORARY_HIDE_VIEWS)
 
     var boundKeyOf: (KeyMapping) -> Int = { _ -> -1 }
 
@@ -46,7 +59,7 @@ object KeyBinding {
                 } else {
                     prevGlfwKeyCallback?.invoke(window, key, scancode, action, mods)
                 }
-            }else {
+            } else {
                 prevGlfwKeyCallback?.invoke(window, key, scancode, action, mods)
             }
         }
@@ -62,6 +75,15 @@ object KeyBinding {
         if (PRINTSCREEN_KEY.isDown) {
             println("UltralightUI: Taking screenshot...")
             printScreen()
+        }
+        if (INGAME_CONFIG_KEY.consumeClick()) {
+            Ultralight.showFakeHotbar = !Ultralight.showFakeHotbar
+        }
+        if (TEMPORARY_HIDE_VIEWS.isDown && !Ultralight.hideAllViews) {
+            Ultralight.hideAllViews = true
+        }
+        if (!TEMPORARY_HIDE_VIEWS.isDown && Ultralight.hideAllViews) {
+            Ultralight.hideAllViews = false
         }
     }
 

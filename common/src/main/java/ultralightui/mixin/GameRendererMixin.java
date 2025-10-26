@@ -31,6 +31,9 @@ public abstract class GameRendererMixin {
     @Unique
     boolean ultralight_ui$afterWorldBeforeUI$aboveGuiFirstCall = false;
 
+    @Unique
+    boolean ultralight_ui$afterWorldBeforeUI$fullScreenFirstCall = false;
+
     @Inject(method = "render", at = @At(value = "HEAD"))
     private void beforeRender(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
         if (!RenderSystem.isOnRenderThread()) {
@@ -38,16 +41,17 @@ public abstract class GameRendererMixin {
         }
         if (minecraft.noRender) return;
         if (minecraft.screen instanceof UltralightBrowserScreen) return;
+        if (Ultralight.INSTANCE.getHideAllViews()) return;
         ultralight_ui$afterWorldBeforeUI$aboveWorldFirstCall = true;
         ultralight_ui$afterWorldBeforeUI$aboveHudFirstCall = true;
         ultralight_ui$afterWorldBeforeUI$aboveGuiFirstCall = true;
+        ultralight_ui$afterWorldBeforeUI$fullScreenFirstCall = true;
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;setOrtho(FFFFFF)Lorg/joml/Matrix4f;", remap = false))
     //    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;"))
     //    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;render(Lnet/minecraft/client/gui/GuiGraphics;F)V", shift = At.Shift.AFTER))
     private void aboveWorld(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (minecraft.noRender) return;
         if (ultralight_ui$afterWorldBeforeUI$aboveWorldFirstCall) {
             ultralight_ui$afterWorldBeforeUI$aboveWorldFirstCall = false;
             ultralight_ui$drawViews(UltralightViewRenderAt.AboveWorld);
@@ -56,7 +60,6 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;flush()V"))
     private void AboveGui(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (minecraft.noRender) return;
         if (ultralight_ui$afterWorldBeforeUI$aboveGuiFirstCall) {
             ultralight_ui$afterWorldBeforeUI$aboveGuiFirstCall = false;
             ultralight_ui$drawViews(UltralightViewRenderAt.AboveGui);
@@ -65,9 +68,11 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;flush()V", shift = At.Shift.AFTER))
     private void FullScreenView(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (minecraft.noRender) return;
-        if (Ultralight.INSTANCE.getFullScreenView() != null) {
-            ultralight_ui$drawView(Ultralight.INSTANCE.getFullScreenView());
+        if (ultralight_ui$afterWorldBeforeUI$fullScreenFirstCall) {
+            ultralight_ui$afterWorldBeforeUI$fullScreenFirstCall = false;
+            if (Ultralight.INSTANCE.getFullScreenView() != null) {
+                ultralight_ui$drawView(Ultralight.INSTANCE.getFullScreenView());
+            }
         }
     }
 
@@ -132,35 +137,6 @@ public abstract class GameRendererMixin {
         RenderSystem.applyModelViewMatrix();
         RenderSystem.setProjectionMatrix((new Matrix4f()).setOrtho(0.0F, scaledWidth, scaledHeight, 0.0F, 1000.0F, 21000.0F), VertexSorting.ORTHOGRAPHIC_Z);
     }
-
-//    @Unique
-//    private static void ultralight_ui$uploadTexture(UltralightView view) {
-//        if (view.getTextureId() == 0) {
-//            view.setTextureId(GL11.glGenTextures());
-//        }
-//        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 4);
-//        GL11.glPixelStorei(GL11.GL_UNPACK_ROW_LENGTH, view.getWidth());
-//        GL11.glPixelStorei(GL11.GL_UNPACK_SKIP_ROWS, 0);
-//        GL11.glPixelStorei(GL11.GL_UNPACK_SKIP_PIXELS, 0);
-//        GL11.glPixelStorei(GL11.GL_UNPACK_SWAP_BYTES, 0);
-//        GL11.glPixelStorei(GL11.GL_UNPACK_LSB_FIRST, 0);
-//        GL11.glBindTexture(GL11.GL_TEXTURE_2D, view.getTextureId());
-//        int width = view.getWidth();
-//        int height = view.getHeight();
-//        long buffer = view.updateBuffer();
-//        if (view.getTextureNeedsResize()) {
-//            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL21.GL_SRGB8_ALPHA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-//            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-//            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-//            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
-//            GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-//            view.setTextureWidth(width);
-//            view.setTextureHeight(height);
-//        } else {
-//            GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-//        }
-//        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-//    }
 
     @Unique
     private static void ultralight_ui$drawTexture(int textureId, float x, float y, float w, float h) {

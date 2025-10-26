@@ -11,6 +11,8 @@ object Ultralight {
     const val windowBorderWidth: Int = 8
     const val windowBorderColor: Int = 0x7738bcce
 
+    var hideAllViews: Boolean = false
+
     var views: MutableMap<Int, UltralightView> = mutableMapOf()
 
     var fullScreenView: UltralightView? = null
@@ -21,6 +23,8 @@ object Ultralight {
         set(value) {
             _lastFocusedView = value?.id
         }
+
+    var showFakeHotbar: Boolean = false // 展示一个用于调整 UI 设定的假快捷栏
 
     val lib_soname: String by lazy {
         val os = System.getProperty("os.name")

@@ -193,4 +193,14 @@ class UltralightScreen : Screen(Component.literal("Ultralight UI")) {
         scrolledDelta += delta
         return true
     }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        focusedView?.let { Ultralight.lib.ultralightui_report_key_down(it, scanCode, modifiers) }
+        return super.keyPressed(keyCode, scanCode, modifiers)
+    }
+
+    override fun keyReleased(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        focusedView?.let { Ultralight.lib.ultralightui_report_key_up(it, scanCode, modifiers) }
+        return super.keyReleased(keyCode, scanCode, modifiers)
+    }
 }

@@ -17,6 +17,8 @@ dependencies {
 
     modImplementation(libs.flk)
 
+    modImplementation("com.terraformersmc:modmenu:7.2.2")
+
     implementation("com.github.jnr:jnr-ffi:2.2.17")
 
     shadow("com.github.jnr:jnr-ffi:2.2.17")
@@ -36,6 +38,13 @@ tasks.shadowJar {
 tasks.remapJar {
     dependsOn(tasks.shadowJar)
     inputFile.set(tasks.shadowJar.get().archiveFile)
+}
+
+repositories {
+    maven {
+        name = "Terraformers"
+        url = uri("https://maven.terraformersmc.com/")
+    }
 }
 
 loom {

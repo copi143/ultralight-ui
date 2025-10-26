@@ -1,5 +1,11 @@
 package ultralightui
 
+import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.vertex.BufferUploader
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.Tesselator
+import com.mojang.blaze3d.vertex.VertexFormat
+import net.minecraft.client.renderer.GameRenderer
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL12
 import org.lwjgl.opengl.GL21
@@ -36,4 +42,24 @@ fun downloadTexture(id: Int, buffer: Long, width: Int, height: Int) {
     GL11.glBindTexture(GL11.GL_TEXTURE_2D, id)
     GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer)
     GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0)
+}
+
+fun drawTexture(textureId: Int, x: Double, y: Double, w: Double, h: Double) {
+    RenderSystem.resetTextureMatrix()
+
+    RenderSystem.enableBlend()
+    RenderSystem.defaultBlendFunc()
+    RenderSystem.setShader(GameRenderer::getPositionTexShader)
+    RenderSystem.setShaderTexture(0, textureId)
+    RenderSystem.setShaderColor(1f, 1f, 1f, 1f)
+
+    val buffer = Tesselator.getInstance().builder
+    buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
+    buffer.vertex(x, y, 0.0).uv(0.0f, 0.0f).endVertex()
+    buffer.vertex(x, y + h, 0.0).uv(0.0f, 1.0f).endVertex()
+    buffer.vertex(x + w, y + h, 0.0).uv(1.0f, 1.0f).endVertex()
+    buffer.vertex(x + w, y, 0.0).uv(1.0f, 0.0f).endVertex()
+    BufferUploader.drawWithShader(buffer.end())
+
+    RenderSystem.disableBlend()
 }

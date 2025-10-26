@@ -23,5 +23,7 @@ eclipse
 run
 runs
 
+.kotlin
+
 # see https://github.com/copi143/ultralight-wrapping
 /ultralight-wrapping
