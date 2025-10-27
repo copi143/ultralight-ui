@@ -18,7 +18,19 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "ultralightui.ExampleModKt::init"
+        "value": "ultralightui.UltralightUIFabricKt::init"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "ultralightui.UltralightUIFabricKt::clientInit"
+      }
+    ],
+    "server": [
+      {
+        "adapter": "kotlin",
+        "value": "ultralightui.UltralightUIFabricKt::serverInit"
       }
     ]
   },

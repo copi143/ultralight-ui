@@ -49,7 +49,23 @@ object Ultralight {
         }
     }
 
+    var initialized: Boolean = false
     fun init() {
+        if (initialized) {
+            Constants.LOG.error("Ultralight.init called more than once!")
+            return
+        }
+        initialized = true
+    }
+
+    var clientInitialized: Boolean = false
+    fun clientInit() {
+        if (clientInitialized) {
+            Constants.LOG.error("Ultralight.clientInit called more than once!")
+            return
+        }
+        clientInitialized = true
+
         downloadResourcesIfNeeded()
         val mc = Minecraft.getInstance().gameDirectory.absolutePath
         val path = Paths.get(mc, lib_soname).absolutePathString()
@@ -57,6 +73,15 @@ object Ultralight {
         lib.ultralightui_init()
         val view = createView("https://cytoscape.org/cytoscape.js-klay/")
         view.renderAt = UltralightViewRenderAt.AboveWorld
+    }
+
+    var serverInitialized: Boolean = false
+    fun serverInit() {
+        if (serverInitialized) {
+            Constants.LOG.error("Ultralight.serverInit called more than once!")
+            return
+        }
+        serverInitialized = true
     }
 
     fun createView(url: String, transparent: Int = 0): UltralightView {
