@@ -80,7 +80,23 @@ dependencies {
     modImplementation(libs.kff)
     annotationProcessor(variantOf(libs.mixin) { classifier("processor") })
 
+    // 完蛋啦，这回 mixin 注入也爆炸了
+    compileOnly("dev.emi:emi-forge:1.1.22+1.20.1:api")
+    runtimeOnly("dev.emi:emi-forge:1.1.22+1.20.1")
+
+    // 救不了了，让它炸吧
+    compileOnly("org.appliedenergistics:guideme:20.1.14:api")
+    runtimeOnly("org.appliedenergistics:guideme:20.1.14")
+
+    // 不知道为什么找不到类，但是构建后外部运行可以
     implementation("com.github.jnr:jnr-ffi:2.2.17")
 
     shadow("com.github.jnr:jnr-ffi:2.2.17")
+}
+
+repositories {
+    maven {
+        name = "Terraformers"
+        url = uri("https://maven.terraformersmc.com/")
+    }
 }

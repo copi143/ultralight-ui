@@ -18,6 +18,8 @@ dependencies {
     modImplementation(libs.flk)
 
     modImplementation("com.terraformersmc:modmenu:7.2.2")
+    modCompileOnly("dev.emi:emi-fabric:1.1.22+1.20.1:api")
+    modLocalRuntime("dev.emi:emi-fabric:1.1.22+1.20.1")
 
     implementation("com.github.jnr:jnr-ffi:2.2.17")
 

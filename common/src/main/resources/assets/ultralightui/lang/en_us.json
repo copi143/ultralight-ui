@@ -1,3 +1,9 @@
 {
   "key.categories.ultralightui": "UltraLight UI",
+  "key.ultralightui.menu": "Open Menu",
+  "key.ultralightui.browser": "Open Fullscreen Browser",
+  "key.ultralightui.printscreen": "Screenshot",
+  "key.ultralightui.ingame_config": "Open In-game Config",
+  "key.ultralightui.temporary_escape": "Temporarily Leave Game to Operate UI (Hold)",
+  "key.ultralightui.temporary_hide_views": "Temporarily Hide All UI (Hold)"
 }

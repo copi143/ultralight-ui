@@ -1,3 +1,9 @@
 {
   "key.categories.ultralightui": "UltraLight UI",
+  "key.ultralightui.menu": "打开菜单",
+  "key.ultralightui.browser": "打开全屏浏览器",
+  "key.ultralightui.printscreen": "截图",
+  "key.ultralightui.ingame_config": "打开游戏内配置",
+  "key.ultralightui.temporary_escape": "临时离开游戏以操作 UI (按住不放)",
+  "key.ultralightui.temporary_hide_views": "临时隐藏所有 UI (按住不放)"
 }

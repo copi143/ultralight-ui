@@ -18,7 +18,20 @@ neoForge {
 dependencies {
     compileOnly(libs.mixin)
 
-    implementation("com.github.jnr:jnr-ffi:2.2.13")
+    compileOnly("com.terraformersmc:modmenu:7.2.2")
+    compileOnly("dev.emi:emi-fabric:1.1.22+1.20.1:api")
+
+    compileOnly("dev.emi:emi-forge:1.1.22+1.20.1:api")
+    compileOnly("org.appliedenergistics:guideme:20.1.14:api")
+
+    compileOnly("com.github.jnr:jnr-ffi:2.2.13")
+}
+
+repositories {
+    maven {
+        name = "Terraformers"
+        url = uri("https://maven.terraformersmc.com/")
+    }
 }
 
 configurations {
